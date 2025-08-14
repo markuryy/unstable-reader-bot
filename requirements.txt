@@ -1,0 +1,6 @@
+unstable-reader
+discord.py
+PyYAML
+fastapi
+uvicorn
+python-dotenv

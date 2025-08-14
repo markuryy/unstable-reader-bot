@@ -1,0 +1,13 @@
+[project]
+name = "unstable-reader-bot"
+version = "0.1.0"
+description = "Discord bot for extracting metadata from images using Unstable Reader"
+requires-python = ">=3.12"
+dependencies = [
+    "unstable-reader",
+    "discord.py",
+    "PyYAML",
+    "fastapi",
+    "uvicorn",
+    "python-dotenv"
+]
