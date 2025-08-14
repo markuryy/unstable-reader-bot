@@ -9,5 +9,6 @@ dependencies = [
     "PyYAML",
     "fastapi",
     "uvicorn",
-    "python-dotenv"
+    "python-dotenv",
+    "python-multipart",
 ]

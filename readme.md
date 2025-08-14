@@ -67,24 +67,65 @@ uv is a fast Python package and project manager that:
    - Creates a `.venv` folder with the virtual environment
    - Installs all required dependencies
 
-4. **Set up your Discord bot token**:
+4. **Create a Discord Bot and Get Token**:
+   
+   **Step 1: Create the Application**
+   - Go to [Discord Developer Portal](https://discord.com/developers/applications)
+   - Click "New Application" button (top right)
+   - Give your bot a name (e.g., "Unstable Reader Bot")
+   - Click "Create"
+   
+   **Step 2: Create the Bot**
+   - In your application, go to the "Bot" section (left sidebar)
+   - Click "Add Bot" or "Reset Token" if bot already exists
+   - Click "Copy" under the TOKEN section - this is your bot token!
+   - **IMPORTANT**: Keep this token secret, never share it!
+   
+   **Step 3: Configure Bot Settings**
+   - Under "Privileged Gateway Intents", enable:
+     - MESSAGE CONTENT INTENT
+     - SERVER MEMBERS INTENT
+   - Save changes
+   
+   **Step 4: Add Bot to Your Server**
+   - Go to "OAuth2" → "URL Generator" (left sidebar)
+   - Under "Scopes", check:
+     - `bot`
+     - `applications.commands` (optional for slash commands)
+   - Under "Bot Permissions", select:
+     - Read Messages/View Channels
+     - Send Messages
+     - Add Reactions
+     - Read Message History
+     - Embed Links
+     - Attach Files
+     - Use External Emojis
+   - Copy the generated URL at the bottom
+   - Open the URL in your browser
+   - Select your server from the dropdown
+   - Click "Authorize"
+   - Complete the captcha
+   
+   The bot should now appear in your server (will be offline until you run it)!
+
+5. **Set up your Discord bot token**:
    - Copy `.env.example` to `.env`:
      ```sh
      copy .env.example .env
      ```
-   - Edit `.env` file with Notepad or any text editor and add your Discord bot token:
+   - Edit `.env` file with Notepad or any text editor and add your Discord bot token from Step 4:
      ```
-     DISCORD_BOT_TOKEN=your_actual_bot_token_here
+     DISCORD_BOT_TOKEN=paste_your_token_here
      ```
    - **Important**: Never share your `.env` file with anyone!
 
-5. **Run the bot**:
+6. **Run the bot**:
    ```sh
    uv run python discord_bot.py
    ```
    The bot will start and the API will be available at `http://localhost:8000`
 
-6. **To stop the bot**:
+7. **To stop the bot**:
    Press `Ctrl+C` in the terminal window
 
 ### Alternative: Manual Setup (if uv doesn't work)
