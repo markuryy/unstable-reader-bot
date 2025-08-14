@@ -1,294 +1,174 @@
-# Unstable Reader Bot & API
+# Unstable Reader Bot
 
-## Overview
-
-The Unstable Reader Bot & API is a simple tool designed to extract metadata from images using my Unstable Reader library. The bot is available on the Marquee Discord server and can also be accessed via an API endpoint for testing.
-
-### Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Discord Bot](#discord-bot)
-  - [API](#api)
-- [Examples](#examples)
-  - [Using the API in Applications and Web Apps](#using-the-api-in-applications-and-web-apps)
-- [License](#license)
-- [Contributors](#contributors)
+A Discord bot that extracts and displays metadata from AI-generated images using the Unstable Reader library. When someone posts an image, the bot adds a 🔍 reaction - click it to see the prompt and metadata!
 
 ## Features
 
-- **Discord Bot**: Automatically extracts and displays metadata from images and videos posted in Discord channels.
-- **API**: Provides an endpoint to extract metadata from images and videos via HTTP POST requests.
-- **Unstable Reader Library**: Utilizes the Unstable Reader library for metadata extraction.
+- **Discord Bot**: Automatically adds reactions to images for on-demand metadata extraction
+- **API**: Provides an endpoint to extract metadata via HTTP POST requests  
+- **Configurable**: Option to auto-star images for Carl-bot starboard integration
 
 ## Installation
 
-### Windows Setup with uv (Recommended)
+This project uses **uv** - a modern Python package manager that handles Python versions and dependencies without affecting your system Python. Think of it like conda but for 2025.
 
-This project uses **uv** for Python version management, which allows you to use Python 3.12 for this bot without affecting your system's Python 3.13.5 installation.
-
-#### What is uv?
-
-uv is a fast Python package and project manager that:
-- Manages Python versions without interfering with your system Python
-- Creates isolated virtual environments automatically
-- Handles dependencies efficiently
-- Works great on Windows
-
-### Setup Instructions
+### Windows Installation
 
 1. **Install uv**:
-   Open PowerShell or Command Prompt and run:
    ```powershell
-   # Using PowerShell (recommended)
    powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
    ```
-   Or if you prefer using pip:
+
+2. **Clone the repository**:
    ```sh
-   pip install uv
+   git clone https://github.com/markuryy/unstable-reader-bot
+   cd unstable-reader-bot
    ```
 
-2. **Clone or download the repository**:
-   ```sh
-   git clone <repository_url>
-   cd <repository_directory>
-   ```
-   Or download and extract the ZIP file.
-
-3. **Create virtual environment and install dependencies**:
-   uv will automatically download Python 3.12 and create an isolated environment:
+3. **Install dependencies**:
    ```sh
    uv sync
    ```
-   This command:
-   - Downloads Python 3.12 if needed (won't affect your Python 3.13.5)
-   - Creates a `.venv` folder with the virtual environment
-   - Installs all required dependencies
+   This automatically downloads Python 3.12 and creates an isolated environment.
 
-4. **Create a Discord Bot and Get Token**:
-   
-   **Step 1: Create the Application**
-   - Go to [Discord Developer Portal](https://discord.com/developers/applications)
-   - Click "New Application" button (top right)
-   - Give your bot a name (e.g., "Unstable Reader Bot")
-   - Click "Create"
-   
-   **Step 2: Create the Bot**
-   - In your application, go to the "Bot" section (left sidebar)
-   - Click "Add Bot" or "Reset Token" if bot already exists
-   - Click "Copy" under the TOKEN section - this is your bot token!
-   - **IMPORTANT**: Keep this token secret, never share it!
-   
-   **Step 3: Configure Bot Settings**
-   - Under "Privileged Gateway Intents", enable:
-     - MESSAGE CONTENT INTENT
-     - SERVER MEMBERS INTENT
-   - Save changes
-   
-   **Step 4: Add Bot to Your Server**
-   - Go to "OAuth2" → "URL Generator" (left sidebar)
-   - Under "Scopes", check:
-     - `bot`
-     - `applications.commands` (optional for slash commands)
-   - Under "Bot Permissions", select:
-     - Read Messages/View Channels
-     - Send Messages
-     - Add Reactions
-     - Read Message History
-     - Embed Links
-     - Attach Files
-     - Use External Emojis
-   - Copy the generated URL at the bottom
-   - Open the URL in your browser
-   - Select your server from the dropdown
-   - Click "Authorize"
-   - Complete the captcha
-   
-   The bot should now appear in your server (will be offline until you run it)!
+4. **Configure the bot**:
+   ```sh
+   copy .env.example .env
+   ```
+   Edit `.env` and replace `your_actual_bot_token_here` with your Discord bot token.
 
-5. **Set up your Discord bot token**:
-   - Copy `.env.example` to `.env`:
-     ```sh
-     copy .env.example .env
-     ```
-   - Edit `.env` file with Notepad or any text editor and add your Discord bot token from Step 4:
-     ```
-     DISCORD_BOT_TOKEN=paste_your_token_here
-     ```
-   - **Important**: Never share your `.env` file with anyone!
-
-6. **Run the bot**:
+5. **Run the bot**:
    ```sh
    uv run python discord_bot.py
    ```
-   The bot will start and the API will be available at `http://localhost:8000`
 
-7. **To stop the bot**:
-   Press `Ctrl+C` in the terminal window
+### Ubuntu/Linux Installation
 
-### Alternative: Manual Setup (if uv doesn't work)
-
-If you have issues with uv, you can use the traditional approach:
-
-1. Make sure Python 3.12+ is installed from [python.org](https://www.python.org/downloads/)
-2. Create a virtual environment:
+1. **Install uv**:
    ```sh
-   python -m venv .venv
-   .venv\Scripts\activate
+   curl -LsSf https://astral.sh/uv/install.sh | sh
    ```
-3. Install dependencies:
+
+2. **Clone the repository**:
    ```sh
-   pip install -r requirements.txt
+   git clone https://github.com/markuryy/unstable-reader-bot
+   cd unstable-reader-bot
    ```
-4. Follow steps 4-6 from above (but use `python discord_bot.py` instead of `uv run python discord_bot.py`)
 
-### Requirements
+3. **Install dependencies**:
+   ```sh
+   uv sync
+   ```
 
-- Python 3.12+ (managed by uv, won't affect your system Python)
-- Discord.py
-- FastAPI
-- Uvicorn
-- Unstable Reader Library
-- python-dotenv
+4. **Configure the bot**:
+   ```sh
+   cp .env.example .env
+   ```
+   Edit `.env` and add your Discord bot token.
+
+5. **Run the bot**:
+   ```sh
+   uv run python discord_bot.py
+   ```
+
+## Discord Bot Setup
+
+### Step 1: Create the Application
+
+1. Go to [Discord Developer Portal](https://discord.com/developers/applications)
+2. Click "New Application" (top right)
+3. Name your bot (e.g., "Unstable Reader Bot")
+4. Click "Create"
+
+### Step 2: Create the Bot
+
+1. Go to "Bot" section (left sidebar)
+2. Click "Reset Token" or "Add Bot"
+3. Click "Copy" under TOKEN - save this for your `.env` file!
+
+### Step 3: Configure Bot Settings
+
+Under "Privileged Gateway Intents", enable:
+- MESSAGE CONTENT INTENT
+- SERVER MEMBERS INTENT
+
+Save changes.
+
+### Step 4: Add Bot to Your Server
+
+1. Go to "OAuth2" → "URL Generator" (left sidebar)
+2. Under "Scopes", check:
+   - `bot`
+   
+3. Under "Bot Permissions", select:
+   
+   - `Read Message History`
+   - `Use External Emojis`
+   - `Add reactions`
+
+4. Copy the generated URL at the bottom
+5. Open URL in browser
+6. Select your server
+7. Click "Authorize"
+
+The bot will appear offline until you run it!
+
+## Configuration
+
+### Star Reactions
+
+The bot can automatically add ⭐ reactions for Carl-bot starboard integration. To disable:
+
+1. Open `discord_bot.py`
+2. Find `ADD_STARS = True` near the top
+3. Change to `ADD_STARS = False`
+4. Restart the bot
 
 ## Usage
 
-### Discord Bot
+### Discord Commands
 
-The Discord bot can be used to analyze images and videos posted in Discord channels. It supports commands to include or exclude channels from analysis.
+- `!exclude`: Exclude current channel from image analysis
+- `!include`: Include current channel in image analysis
 
-#### Commands
+### How It Works
 
-- `!exclude`: Excludes the current channel from image analysis.
-- `!include`: Includes the current channel in image analysis.
+1. Bot adds 🔍 reaction to new images
+2. Click the reaction to receive metadata via DM
+3. If enabled, also adds ⭐ for starboard
 
-### API
+### API Endpoint
 
-The API provides an endpoint to extract metadata from images and videos.
-
-#### Endpoint
-
-- **URL**: `http://localhost:8000/extract-metadata/`
-- **Method**: POST
-- **Form Data**:
-  - Key: `file`
-  - Type: `File`
-  - Description: The image or video file to analyze.
-
-#### Example
+The bot also runs a local API at `http://localhost:8000`:
 
 ```sh
-curl -X POST "http://localhost:8000/extract-metadata/" -F "file=@path/to/your/image.jpg"
+curl -X POST "http://localhost:8000/extract-metadata/" -F "file=@image.jpg"
 ```
 
-### Public API for Testing
+## Updating
 
-The public API is available **only for testing** and is rate-limited for safety. Your own deployment is recommended for less rate-limiting. Test it (no guarantees on uptime) at `https://api.bewaretheart.com/extract-metadata/`.
-
-## Examples
-
-### Using the API in Applications and Web Apps
-
-#### Python Example
-
-Here's an example of how to use the API in a Python application:
-
-```python
-import requests
-
-url = "http://localhost:8000/extract-metadata/"
-file_path = "path/to/your/image.jpg"
-
-with open(file_path, "rb") as file:
-    response = requests.post(url, files={"file": file})
-
-if response.status_code == 200:
-    metadata = response.json().get("metadata")
-    print("Metadata extracted:", metadata)
-else:
-    print("Error:", response.json().get("error"))
+To update the bot with latest changes:
+```sh
+git pull && uv sync
 ```
 
-#### Node.js Example
+## Troubleshooting
 
-Here's an example of how to use the API in a Node.js application:
+- **No pip needed**: uv handles everything - don't install pip or use pip commands
+- **Python version issues**: uv automatically uses Python 3.12, regardless of your system Python
+- **Bot appears offline**: Make sure you're running `uv run python discord_bot.py`
+- **No reactions on old images**: Bot only reacts to images posted while it's running
 
-```javascript
-const axios = require('axios');
-const FormData = require('form-data');
-const fs = require('fs');
+## Notes
 
-const url = 'http://localhost:8000/extract-metadata/';
-const filePath = 'path/to/your/image.jpg';
-
-const form = new FormData();
-form.append('file', fs.createReadStream(filePath));
-
-axios.post(url, form, { headers: form.getHeaders() })
-  .then(response => {
-    console.log('Metadata extracted:', response.data.metadata);
-  })
-  .catch(error => {
-    console.error('Error:', error.response.data.error);
-  });
-```
-
-#### Next.js Example
-
-Here's an example of how to use the API in a Next.js application:
-
-```jsx
-import axios from 'axios';
-import { useState } from 'react';
-
-export default function Home() {
-  const [metadata, setMetadata] = useState(null);
-  const [error, setError] = useState(null);
-
-  const handleFileUpload = async (event) => {
-    const file = event.target.files[0];
-    const formData = new FormData();
-    formData.append('file', file);
-
-    try {
-      const response = await axios.post('http://localhost:8000/extract-metadata/', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      setMetadata(response.data.metadata);
-    } catch (error) {
-      setError(error.response.data.error);
-    }
-  };
-
-  return (
-    <div>
-      <h1>Metadata Extractor</h1>
-      <input type="file" onChange={handleFileUpload} />
-      {metadata && <pre>{JSON.stringify(metadata, null, 2)}</pre>}
-      {error && <p>Error: {error}</p>}
-    </div>
-  );
-}
-```
-
-### Running the Local Version
-
-I've been running the local version nonstop for months without issues on my public Male AI Art Discord server, [The Bulge](https://www.thebulge.xyz/). The bot is also available on the Marquee Discord server: [Marquee Discord Server](https://discord.gg/tSTYWq4Cay).
-
-### Star Reactions for Carl.gg
-
-The `ADD_STARS` variable in the Python script can be set to enable or disable star reactions. This feature helps with auto-starring for the starboard with the Carl.gg Discord bot.
+- Works with ComfyUI images (better with ComfyUI Image Metadata extension)
+- Virtual environment is just a folder with dependencies - not a container or VM
+- Can run continuously or as a system service
 
 ## License
 
-The Unstable Reader Bot & API code is licensed under the MIT License.
+MIT License
 
 ## Contributors
 
-- **Markury**
-
-I utilized Opus and 4o (Anthropic Claude 3 and OpenAI ChatGPT, via chat UIs and API such as LibreChat and the Cursor IDE) for assistance writing the code. Thus, it might be a little wonky or might not follow best practices, so improvements are welcomed.
-
-For more information or to contribute, visit the Marquee Discord server: [Marquee Discord Server](https://discord.gg/tSTYWq4Cay).
+- **Markury** - with assistance from AI tools (Claude & ChatGPT)
